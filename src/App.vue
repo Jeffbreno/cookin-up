@@ -1,3 +1,14 @@
+<script lang="ts">
+import Banner from "./components/Banner.vue";
+import Principal from "./components/Principal.vue";
+
+export default {
+  components: { Banner, Principal },
+};
+</script>
 <template>
-  <h1>Meu primeiro projeto Vue!</h1>
+  <Banner />
+  <Principal />
 </template>
+
+<style scoped></style>
