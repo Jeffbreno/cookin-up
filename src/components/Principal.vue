@@ -5,10 +5,16 @@ import Tag from "./Tag.vue";
 export default {
   data() {
     return {
-      ingredientes: ["Alho", "Manteiga", "Orégano", "Tomate"],
+      ingredientes: [] as string[],
     };
   },
   components: { SelecionarIngredientes, Tag },
+  methods: {
+    adicionarIngredientes(ingrediente: string) {
+      this.ingredientes.push(ingrediente)
+
+    }
+  }
 };
 </script>
 
@@ -19,7 +25,7 @@ export default {
 
       <ul v-if="ingredientes.length" class="ingredientes-sua-lista">
         <li v-for="ingrediente in ingredientes" :key="ingrediente">
-          <Tag :texto="ingrediente" ativa/>
+          <Tag :texto="ingrediente" ativa />
         </li>
       </ul>
 
@@ -28,7 +34,9 @@ export default {
         Sua lista está vazia, selecione ingredientes para iniciar.
       </p>
     </section>
-    <SelecionarIngredientes />
+    <SelecionarIngredientes @adicionar-ingrediente="adicionarIngredientes" />
+
+
   </main>
 </template>
 
