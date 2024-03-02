@@ -1,9 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import SelecionarIngredientes from "./SelecionarIngredientes.vue";
-import Tag from "./Tag.vue";
+import SuaLista from "./SuaLista.vue";
+import MostrarReceitas from './MostrarReceitas.vue';
+
+type Pagina = 'SelecionarIngredientes' | 'MostrarReceitas';
 
 const ingredientes = ref<string[]>([]);
+const conteudo = ref('SelecionarIngredientes' as Pagina);
+
+function navegar(pagina: Pagina) {
+  conteudo.value = pagina;
+}
 
 function adicionarIngrediente(ingrediente: string) {
   ingredientes.value.push(ingrediente)
@@ -17,22 +25,13 @@ function removerIngrediente(ingrediente: string) {
 
 <template>
   <main class="conteudo-principal">
-    <section>
-      <span class="subtitulo-lg sua-lista-texto"> Sua lista: </span>
-
-      <ul v-if="ingredientes.length" class="ingredientes-sua-lista">
-        <li v-for="ingrediente in ingredientes" :key="ingrediente">
-          <Tag :texto="ingrediente" ativa />
-        </li>
-      </ul>
-
-      <p v-else="ingredientes.length" class="paragrafo lista-vazia">
-        <img src="@/assets/images/icones/lista-vazia.svg" alt="Ícone de pesquisa" />
-        Sua lista está vazia, selecione ingredientes para iniciar.
-      </p>
-    </section>
-    <SelecionarIngredientes @adicionar-ingrediente="adicionarIngrediente" @remover-ingrediente="removerIngrediente" />
-
+    <SuaLista :ingredientes="ingredientes" />
+    <KeepAlive include="SelecionarIngredientes">
+      <SelecionarIngredientes v-if="conteudo === 'SelecionarIngredientes'" @adicionar-ingrediente="adicionarIngrediente"
+        @remover-ingrediente="removerIngrediente" @buscar-receitas="navegar('MostrarReceitas')" />
+      <MostrarReceitas v-else-if="conteudo === 'MostrarReceitas'" :ingredientes="ingredientes"
+        @editar-receitas="navegar('SelecionarIngredientes')" />
+    </KeepAlive>
 
   </main>
 </template>
